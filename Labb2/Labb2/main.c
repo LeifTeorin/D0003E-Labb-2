@@ -3,11 +3,12 @@
  *
  * Created: 2021-02-04 09:33:58
  * Author : hjall
+ * Author : crill
  */ 
 
 #include "tinythreads.h"
 #include <stdbool.h>
-
+#include <avr/interrupt.h>
 int characters[13] =
 {
 	0x1551,		// 0
@@ -84,4 +85,18 @@ void computePrimes(int pos) {
 int main() {
 	spawn(computePrimes, 0);
 	computePrimes(3);
+}
+
+//om interrupt på pinb7 yielda
+ISR(PCINT1_vect) 
+{
+	if ((PINB7 >> 7) == 0)
+	{
+		yield();
+	}
+}
+//Om timern säger till, yielda
+ISR(TIMER1_COMPA_vect)
+{
+	yield(); 
 }
