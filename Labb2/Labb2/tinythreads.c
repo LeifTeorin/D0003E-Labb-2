@@ -98,9 +98,35 @@ void yield(void) {
 }
 
 void lock(mutex *m) {
-
+	DISABLE();
+	if(m->locked){
+		/*if(*m->waitQ == NULL){
+			*m->waitQ = current;
+		}else{
+			thread q = *m->waitQ;
+			while (q->next){
+				q = q->next;
+			}
+			q->next = current;
+		}*/
+		enqueue(current, &(m->waitQ))
+		dispatch(dequeue(&readyQ));
+	}else {
+		m->locked = 1;
+	}
+	ENABLE();
 }
 
 void unlock(mutex *m) {
-
+	DISABLE();
+	if(m->waitQ == NULL){
+		m->locked = 0;
+	}else{
+		/*thread p = *m->waitQ;
+		*m->waitQ = *m->waitQ->next;
+		dispatch(p);*/
+		enqueue(current, readyQ);
+		dispatch(dequeue(&(m->waitQ)))
+	}
+	ENABLE();
 }

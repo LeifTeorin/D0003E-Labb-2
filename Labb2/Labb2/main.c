@@ -26,6 +26,11 @@ int characters[13] =
 	0x1510		// J
 };
 
+mutex *m;
+m = malloc(sizeof(mutex));
+m->locked = 0;
+m->waitQ = NULL;
+
 void writeChar(char ch, int pos){
 	if((pos>5) | (pos<0)){
 		return;
