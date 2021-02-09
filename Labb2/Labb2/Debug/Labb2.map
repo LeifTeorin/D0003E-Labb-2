@@ -43,7 +43,7 @@ Discarded input sections
  .data          0x00000000        0x0 tinythreads.o
  .bss           0x00000000        0x0 tinythreads.o
  .text.initialize
-                0x00000000       0x62 tinythreads.o
+                0x00000000       0x86 tinythreads.o
  .text.spawn    0x00000000       0xbc tinythreads.o
  .text.lock     0x00000000       0x3a tinythreads.o
  .text.unlock   0x00000000       0x40 tinythreads.o
@@ -512,11 +512,11 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0xfd3
+.debug_info     0x00000000      0xfde
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x7b6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega169p/avr5/crtatmega169p.o
  .debug_info    0x000007b6      0x2a1 main.o
- .debug_info    0x00000a57      0x57c tinythreads.o
+ .debug_info    0x00000a57      0x587 tinythreads.o
 
 .debug_abbrev   0x00000000      0xaaa
  *(.debug_abbrev)
@@ -524,24 +524,24 @@ END GROUP
  .debug_abbrev  0x0000074b      0x172 main.o
  .debug_abbrev  0x000008bd      0x1ed tinythreads.o
 
-.debug_line     0x00000000      0x601
+.debug_line     0x00000000      0x620
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x122 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega169p/avr5/crtatmega169p.o
  .debug_line    0x00000122      0x1f5 main.o
- .debug_line    0x00000317      0x2ea tinythreads.o
+ .debug_line    0x00000317      0x309 tinythreads.o
 
 .debug_frame    0x00000000      0x24c
  *(.debug_frame)
  .debug_frame   0x00000000       0xc8 main.o
  .debug_frame   0x000000c8      0x184 tinythreads.o
 
-.debug_str      0x00000000      0x555
+.debug_str      0x00000000      0x59e
  *(.debug_str)
  .debug_str     0x00000000      0x2b3 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega169p/avr5/crtatmega169p.o
  .debug_str     0x000002b3      0x1a7 main.o
                                 0x1e0 (size before relaxing)
- .debug_str     0x0000045a       0xfb tinythreads.o
-                                0x278 (size before relaxing)
+ .debug_str     0x0000045a      0x144 tinythreads.o
+                                0x27f (size before relaxing)
 
 .debug_loc      0x00000000      0x7ea
  *(.debug_loc)

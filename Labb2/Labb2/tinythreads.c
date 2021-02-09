@@ -39,6 +39,22 @@ static void initialize(void) {
 	PCMSK1 = 0x80;
 	TCCR1A = 0xC0;
 	TCCR1B = 0x18;
+	
+	//OC1A is set high on compare match.
+	TCCR1A = (1 << COM1A0) | (1 << COM1A1);
+	
+	// Set timer to CTC and prescale Factor on 1024.
+	TCCR1B = (1 << WGM12) | (1 << CS10) |(1 << CS12);
+	
+	// Set Value to around 50ms. 8000000/20480 = 390.625
+	OCR1A = 391;
+	
+	//clearing the TCNT1 register during initialization.
+	TCNT1 = 0x0;
+	
+	//Compare a match interrupt Enable.
+	TIMSK1 = (1 << OCIE1A);
+	
 	initialized = 1;
 }
 

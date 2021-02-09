@@ -15,19 +15,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .debug_aranges 000000b0  00000000  00000000  00000368  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000fd3  00000000  00000000  00000418  2**0
+  6 .debug_info   00000fde  00000000  00000000  00000418  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000aaa  00000000  00000000  000013eb  2**0
+  7 .debug_abbrev 00000aaa  00000000  00000000  000013f6  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000601  00000000  00000000  00001e95  2**0
+  8 .debug_line   00000620  00000000  00000000  00001ea0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  0000024c  00000000  00000000  00002498  2**2
+  9 .debug_frame  0000024c  00000000  00000000  000024c0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000555  00000000  00000000  000026e4  2**0
+ 10 .debug_str    0000059e  00000000  00000000  0000270c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000007ea  00000000  00000000  00002c39  2**0
+ 11 .debug_loc    000007ea  00000000  00000000  00002caa  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000a8  00000000  00000000  00003423  2**0
+ 12 .debug_ranges 000000a8  00000000  00000000  00003494  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -98,12 +98,6 @@ Disassembly of section .text:
   96:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 0000009a <main>:
-	//TCNT1 = 0;
-	//LCD_init();
-	//writeChar(3, 5);
-	//spawn(computePrimes, 0);
-	//computePrimes(3);
-}
   9a:	80 e0       	ldi	r24, 0x00	; 0
   9c:	90 e0       	ldi	r25, 0x00	; 0
   9e:	08 95       	ret
