@@ -8,7 +8,9 @@
 
 #include "tinythreads.h"
 #include <stdbool.h>
+#include <avr/io.h>
 #include <avr/interrupt.h>
+
 int characters[13] =
 {
 	0x1551,		// 0
@@ -26,10 +28,10 @@ int characters[13] =
 	0x1510		// J
 };
 
-mutex *m;
+/*mutex *m;
 m = malloc(sizeof(mutex));
 m->locked = 0;
-m->waitQ = NULL;
+m->waitQ = NULL;*/
 
 void writeChar(char ch, int pos){
 	if((pos>5) | (pos<0)){
@@ -60,6 +62,13 @@ void writeChar(char ch, int pos){
 	}
 }
 
+void LCD_init(void){
+	LCDCRA |= 0x80;
+	LCDCRB = 0xb7;
+	LCDCCR |= 15; // s?tter kontrastkontrollen till 3,35 V
+	LCDFRR = 7;	// s?tter prescalern och ger framerate 32 Hz
+} 
+
 bool is_prime(long i){
 	for(int x = 2; x < i; x++){
 		if(i%x == 0){
@@ -72,9 +81,9 @@ bool is_prime(long i){
 
 void printAt(long num, int pos) {
 	int pp = pos;
-	writeChar( (num % 100) / 10 + '0', pp);
+	writeChar( ((num % 100) / 10), pp);
 	pp++;
-	writeChar( num % 10 + '0', pp);
+	writeChar( (num % 10), pp);
 }
 
 void computePrimes(int pos) {
@@ -83,25 +92,18 @@ void computePrimes(int pos) {
 	for(n = 1; ; n++) {
 		if (is_prime(n)) {
 			printAt(n, pos);
+			//yield();
 		}
 	}
 }
 
-int main() {
+int main(void) {
+	CLKPR = 0x80;
+	CLKPR = 0x00;
+	TCNT1 = 0;
+	LCD_init();
+	//writeChar(3, 5);
 	spawn(computePrimes, 0);
 	computePrimes(3);
 }
 
-//om interrupt på pinb7 yielda
-ISR(PCINT1_vect) 
-{
-	if ((PINB7 >> 7) == 0)
-	{
-		yield();
-	}
-}
-//Om timern säger till, yielda
-ISR(TIMER1_COMPA_vect)
-{
-	yield(); 
-}

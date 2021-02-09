@@ -34,8 +34,11 @@ static void initialize(void) {
 	for (i=0; i<NTHREADS-1; i++)
 	threads[i].next = &threads[i+1];
 	threads[NTHREADS-1].next = NULL;
-
-
+	PORTB = (1<<PB7);
+	EIMSK = 0x80;
+	PCMSK1 = 0x80;
+	TCCR1A = 0xC0;
+	TCCR1B = 0x18;
 	initialized = 1;
 }
 
@@ -93,8 +96,10 @@ void spawn(void (* function)(int), int arg) {
 }
 
 void yield(void) {
+	DISABLE();
 	enqueue(current, &readyQ);
 	dispatch(dequeue(&readyQ));
+	ENABLE();
 }
 
 void lock(mutex *m) {
@@ -109,7 +114,7 @@ void lock(mutex *m) {
 			}
 			q->next = current;
 		}*/
-		enqueue(current, &(m->waitQ))
+		enqueue(current, &(m->waitQ));
 		dispatch(dequeue(&readyQ));
 	}else {
 		m->locked = 1;
@@ -126,7 +131,21 @@ void unlock(mutex *m) {
 		*m->waitQ = *m->waitQ->next;
 		dispatch(p);*/
 		enqueue(current, readyQ);
-		dispatch(dequeue(&(m->waitQ)))
+		dispatch(dequeue(&(m->waitQ)));
 	}
 	ENABLE();
+}
+
+//om interrupt på pinb7 yielda
+ISR(PCINT1_vect)
+{
+	if ((PINB >> 7) == 1)
+	{
+		yield();
+	}
+}
+//Om timern säger till, yielda
+ISR(TIMER1_COMPA_vect)
+{
+	yield();
 }
