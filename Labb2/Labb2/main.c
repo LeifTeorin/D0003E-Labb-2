@@ -2,8 +2,8 @@
  * Labb2.c
  *
  * Created: 2021-02-04 09:33:58
- * Author : hjall
- * Author : crill
+ * Author : hjallemar
+ * Author : crillucius
  */ 
 
 #include "tinythreads.h"
@@ -11,7 +11,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-int characters[13] =
+int characters[10] =
 {
 	0x1551,		// 0
 	0x0118,		// 1
@@ -22,16 +22,12 @@ int characters[13] =
 	0x1f41,		// 6
 	0x4009,		// 7
 	0x1f51,		// 8
-	0x1b51,		// 9
-	0x0f50,		// H
-	0x1641,		// E
-	0x1510		// J
+	0x1b51		// 9
 };
 
-/*mutex *m;
-m = malloc(sizeof(mutex));
-m->locked = 0;
-m->waitQ = NULL;*/
+int pp;
+
+mutex mut = MUTEX_INIT;
 
 void writeChar(char ch, int pos){
 	if((pos>5) | (pos<0)){
@@ -80,10 +76,12 @@ bool is_prime(long i){
 
 
 void printAt(long num, int pos) {
-	int pp = pos;
+	lock(&mut);
+	pp = pos;
 	writeChar( ((num % 100) / 10), pp);
 	pp++;
 	writeChar( (num % 10), pp);
+	unlock(&mut);
 }
 
 void computePrimes(int pos) {
@@ -100,9 +98,7 @@ void computePrimes(int pos) {
 int main(void) {
 	CLKPR = 0x80;
 	CLKPR = 0x00;
-	TCNT1 = 0;
 	LCD_init();
-	//writeChar(3, 5);
 	spawn(computePrimes, 0);
 	computePrimes(3);
 }

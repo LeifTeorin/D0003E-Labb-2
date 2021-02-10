@@ -15,19 +15,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .debug_aranges 000000b0  00000000  00000000  00000368  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000fde  00000000  00000000  00000418  2**0
+  6 .debug_info   000010a3  00000000  00000000  00000418  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000aaa  00000000  00000000  000013f6  2**0
+  7 .debug_abbrev 00000af4  00000000  00000000  000014bb  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000620  00000000  00000000  00001ea0  2**0
+  8 .debug_line   00000641  00000000  00000000  00001faf  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  0000024c  00000000  00000000  000024c0  2**2
+  9 .debug_frame  0000024c  00000000  00000000  000025f0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000059e  00000000  00000000  0000270c  2**0
+ 10 .debug_str    0000055e  00000000  00000000  0000283c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000007ea  00000000  00000000  00002caa  2**0
+ 11 .debug_loc    000007a5  00000000  00000000  00002d9a  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000a8  00000000  00000000  00003494  2**0
+ 12 .debug_ranges 000000a8  00000000  00000000  0000353f  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -98,14 +98,20 @@ Disassembly of section .text:
   96:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 0000009a <main>:
+	//CLKPR = 0x80;
+	//CLKPR = 0x00;
+	//LCD_init();
+	//spawn(computePrimes, 0);
+	//computePrimes(3);
+}
   9a:	80 e0       	ldi	r24, 0x00	; 0
   9c:	90 e0       	ldi	r25, 0x00	; 0
   9e:	08 95       	ret
 
 000000a0 <enqueue>:
-		dispatch(p);*/
-		enqueue(current, readyQ);
-		dispatch(dequeue(&(m->waitQ)));
+	}else{
+		enqueue(current, &readyQ); // vi sätter in den färdiga processen i readyQ
+		dispatch(dequeue(&(m->waitQ))); // och hämtar nästa ur waitQ
 	}
 	ENABLE();
 }

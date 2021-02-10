@@ -40,19 +40,10 @@ static void initialize(void) {
 	TCCR1A = 0xC0;
 	TCCR1B = 0x18;
 	
-	//OC1A is set high on compare match.
 	TCCR1A = (1 << COM1A0) | (1 << COM1A1);
-	
-	// Set timer to CTC and prescale Factor on 1024.
 	TCCR1B = (1 << WGM12) | (1 << CS10) |(1 << CS12);
-	
-	// Set Value to around 50ms. 8000000/20480 = 390.625
-	OCR1A = 391;
-	
-	//clearing the TCNT1 register during initialization.
+	OCR1A = 391; // 8000000/(1024*20) ~= 391
 	TCNT1 = 0x0;
-	
-	//Compare a match interrupt Enable.
 	TIMSK1 = (1 << OCIE1A);
 	
 	initialized = 1;
@@ -121,17 +112,8 @@ void yield(void) {
 void lock(mutex *m) {
 	DISABLE();
 	if(m->locked){
-		/*if(*m->waitQ == NULL){
-			*m->waitQ = current;
-		}else{
-			thread q = *m->waitQ;
-			while (q->next){
-				q = q->next;
-			}
-			q->next = current;
-		}*/
-		enqueue(current, &(m->waitQ));
-		dispatch(dequeue(&readyQ));
+		enqueue(current, &(m->waitQ)); // om den är låst får nuvarande process vänta i waitQ
+		dispatch(dequeue(&readyQ)); // medans dess körs nästa process i readyQ
 	}else {
 		m->locked = 1;
 	}
@@ -141,13 +123,10 @@ void lock(mutex *m) {
 void unlock(mutex *m) {
 	DISABLE();
 	if(m->waitQ == NULL){
-		m->locked = 0;
+		m->locked = 0; // om waitQ är tom kan vi låsa upp m
 	}else{
-		/*thread p = *m->waitQ;
-		*m->waitQ = *m->waitQ->next;
-		dispatch(p);*/
-		enqueue(current, readyQ);
-		dispatch(dequeue(&(m->waitQ)));
+		enqueue(current, &readyQ); // vi sätter in den färdiga processen i readyQ
+		dispatch(dequeue(&(m->waitQ))); // och hämtar nästa ur waitQ
 	}
 	ENABLE();
 }
